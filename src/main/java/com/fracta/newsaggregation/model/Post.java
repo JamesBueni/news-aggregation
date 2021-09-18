@@ -41,6 +41,8 @@ public class Post {
 	private User author;
 	private Integer voteCount;
 	private Instant creationDate;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "communityId", referencedColumnName = "id")
 	private Community community;
 	
 }
