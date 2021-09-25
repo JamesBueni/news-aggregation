@@ -28,7 +28,7 @@ public class Post {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long postId;
 	@NotBlank(message = "Post name is required.")
 	private String name;
 	@Nullable
@@ -37,12 +37,12 @@ public class Post {
 	@Lob
 	private String description;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "authorId", referencedColumnName = "id")
-	private User author;
+	@JoinColumn(name = "userId", referencedColumnName = "userId")
+	private User user;
 	private Integer voteCount;
 	private Instant creationDate;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "communityId", referencedColumnName = "id")
+	@JoinColumn(name = "communityId", referencedColumnName = "communityId")
 	private Community community;
 	
 }

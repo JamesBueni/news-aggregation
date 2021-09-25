@@ -23,13 +23,13 @@ public class Vote {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long voteId;
 	private VoteType type;
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "postId", referencedColumnName = "id")
+	@JoinColumn(name = "postId", referencedColumnName = "postId")
 	private Post post;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "voterId", referencedColumnName = "id")
-	private User voter;
+	@JoinColumn(name = "userId", referencedColumnName = "userId")
+	private User user;
 }

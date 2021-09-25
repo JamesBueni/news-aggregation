@@ -23,14 +23,14 @@ public class Comment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long commentId;
 	@NotEmpty
 	private String text;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "authorId", referencedColumnName = "id")
-	private User author;
+	@JoinColumn(name = "userId", referencedColumnName = "userId")
+	private User user;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "postId", referencedColumnName = "id")
+	@JoinColumn(name = "postId", referencedColumnName = "postId")
 	private Post post;
 	private Instant creationDate;
 	

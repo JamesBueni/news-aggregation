@@ -26,7 +26,7 @@ public class Community {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long communityId;
 	@NotBlank(message = "Community name is required.")
 	private String name;
 	@NotBlank(message = "Community description is required.")
@@ -35,6 +35,6 @@ public class Community {
 	private List<Post> posts;
 	private Instant creationDate;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private User author;
+	private User user;
 	
 }
