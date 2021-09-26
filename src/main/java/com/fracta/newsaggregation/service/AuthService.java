@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fracta.newsaggregation.dto.RegisterRequest;
+import com.fracta.newsaggregation.exception.NewsAggregationException;
 import com.fracta.newsaggregation.model.NotificationEmail;
 import com.fracta.newsaggregation.model.User;
 import com.fracta.newsaggregation.model.VerificationToken;
@@ -39,7 +40,7 @@ public class AuthService {
 		
 		mailService.sendEmail(new NotificationEmail(user.getEmail(), "Account Activation",
 				String.format("Hello, %s!\n\nWhat can we say? You're part of us from now. Welcome to Fractaline.\n\n"
-				+ "Activate your account: http://localhost:8080/api/auth/account-activation/%s",
+				+ "Activate your account: http://localhost:8080/api/auth/accountVerification/%s",
 				registerRequest.getUsername().toString(), verificationToken.getName())));
 	}
 
@@ -53,4 +54,16 @@ public class AuthService {
 		return verificationToken;
 	}
 
+	public void verifyUser(String tokenName) {
+		var verificationToken = verificationTokenRepo.findByName(tokenName)
+			.orElseThrow(() -> new NewsAggregationException(String.format("$s token is invalid.", tokenName)));
+		fetchUserAndEnable(verificationToken);
+	}
+	
+	@Transactional
+	private void fetchUserAndEnable(VerificationToken verificationToken) {
+		var user = userRepo.findByUsername(verificationToken.getUser().getUsername())
+				.orElseThrow(() -> new NewsAggregationException("User not found."));
+		user.setEnabled(true);
+	}
 }
