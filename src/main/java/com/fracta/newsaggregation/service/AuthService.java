@@ -62,8 +62,9 @@ public class AuthService {
 	
 	@Transactional
 	private void fetchUserAndEnable(VerificationToken verificationToken) {
-		var user = userRepo.findByUsername(verificationToken.getUser().getUsername())
+		var user = userRepo.findByUserId(verificationToken.getUser().getUserId())
 				.orElseThrow(() -> new NewsAggregationException("User not found."));
 		user.setEnabled(true);
+		userRepo.save(user);
 	}
 }
