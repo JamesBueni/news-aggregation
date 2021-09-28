@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "comments")
 public class Comment {
 	
 	@Id
@@ -33,5 +35,4 @@ public class Comment {
 	@JoinColumn(name = "postId", referencedColumnName = "postId")
 	private Post post;
 	private Instant creationDate;
-	
 }

@@ -12,5 +12,6 @@ import com.fracta.newsaggregation.model.VerificationToken;
 public interface UserRepo extends JpaRepository<User, Long> {
 
 	Optional<User> findByUserId(Long userId);
+	Optional<User> findByUsername(String username);
 
 }

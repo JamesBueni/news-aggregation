@@ -5,9 +5,16 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
+import com.fracta.newsaggregation.dto.AuthenticationResponse;
+import com.fracta.newsaggregation.dto.LoginRequest;
 import com.fracta.newsaggregation.dto.RegisterRequest;
 import com.fracta.newsaggregation.exception.NewsAggregationException;
 import com.fracta.newsaggregation.model.NotificationEmail;
@@ -15,6 +22,7 @@ import com.fracta.newsaggregation.model.User;
 import com.fracta.newsaggregation.model.VerificationToken;
 import com.fracta.newsaggregation.repo.UserRepo;
 import com.fracta.newsaggregation.repo.VerificationTokenRepo;
+import com.fracta.newsaggregation.security.JwtProvider;
 
 import lombok.AllArgsConstructor;
 
@@ -26,6 +34,8 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final VerificationTokenRepo verificationTokenRepo;
 	private final MailService mailService;
+	private final AuthenticationManager authenticationManager;
+	private final JwtProvider jwtProvider;
 	
 	@Transactional
 	public void signup(RegisterRequest registerRequest) {
@@ -66,5 +76,14 @@ public class AuthService {
 				.orElseThrow(() -> new NewsAggregationException("User not found."));
 		user.setEnabled(true);
 		userRepo.save(user);
+	}
+
+	public AuthenticationResponse login(LoginRequest loginRequest) {
+		var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+				loginRequest.getUsername(), loginRequest.getPassword()));
+		
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		var token = jwtProvider.generateToken(authentication);
+		return new AuthenticationResponse(token, loginRequest.getUsername());
 	}
 }

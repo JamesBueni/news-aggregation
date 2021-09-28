@@ -1,7 +1,5 @@
 package com.fracta.newsaggregation.controller;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fracta.newsaggregation.dto.AuthenticationResponse;
+import com.fracta.newsaggregation.dto.LoginRequest;
 import com.fracta.newsaggregation.dto.RegisterRequest;
 import com.fracta.newsaggregation.service.AuthService;
 
@@ -33,5 +33,10 @@ public class AuthController {
 	public ResponseEntity<String> verifyUser(@PathVariable String tokenName) {
 		authService.verifyUser(tokenName);
 		return new ResponseEntity<>("Account Verified!", HttpStatus.OK);
+	}
+	
+	@PostMapping("/login")
+	public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+		return authService.login(loginRequest);
 	}
 }
